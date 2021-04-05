@@ -8,7 +8,19 @@ export default{
             data: teacher
           })
     },
+    getAllTeacher(){
+        return request({
+            url: `/edu-teacher/findAll`,
+            method: 'get'
+          })
+    },
     addTeacher(){
 
+    },
+    deleteTeacher(id){
+        return request({
+            url: `/edu-teacher/${id}`,
+            method: 'delete'
+          })
     }
 }

@@ -79,6 +79,49 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/sub',
+    component: Layout,
+    redirect: '/sub/list',
+    name: '课程分类管理',
+    meta: { title: '课程分类管理', icon: 'user' },
+    children: [
+      {
+        path: 'list',
+        name: '课程分类管理列表',
+        component: () => import('@/views/course/subList'),
+        meta: { title: '课程分类管理列表', icon: 'tree' }
+      },
+      {
+        path: 'add',
+        name: '课程分类管理新增',
+        component: () => import('@/views/course/subAdd'),
+        meta: { title: '课程分类管理新增', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/course',
+    component: Layout,
+    redirect: '/course/list',
+    name: '课程管理',
+    meta: { title: '课程管理', icon: 'user' },
+    children: [
+      {
+        path: 'list',
+        name: '课程列表',
+        component: () => import('@/views/course/courseList'),
+        meta: { title: '课程管理列表', icon: 'tree' }
+      },
+      {
+        path: 'add',
+        name: '课程新增',
+        component: () => import('@/views/course/courseAdd'),
+        meta: { title: '课程分类管理新增', icon: 'tree' }
+      }
+    ]
+  },
 
   {
     path: '/form',
