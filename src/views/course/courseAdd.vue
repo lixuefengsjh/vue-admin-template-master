@@ -212,6 +212,7 @@ export default {
         });
         })
         .catch(error => {
+          
           this.$message.error("保存课程基本信息失败");
         });
     }

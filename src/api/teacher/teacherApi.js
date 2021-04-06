@@ -14,8 +14,13 @@ export default{
             method: 'get'
           })
     },
-    addTeacher(){
-
+    addOrUpdateTeacher(ruleForm){
+        return request({
+            url: `/edu-teacher/addTeacher`,
+            method: 'post',
+            //这里是因为后端放在requestBody中
+            data: ruleForm
+          })
     },
     deleteTeacher(id){
         return request({

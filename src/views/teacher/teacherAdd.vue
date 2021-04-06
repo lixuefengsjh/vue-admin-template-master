@@ -27,11 +27,10 @@
       <el-form-item label="讲师简介" prop="intro">
         <el-input type="textarea" v-model="ruleForm.intro"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-form-item>
+
           <el-form-item label="讲师头像">
             <!-- 头衔缩略图 -->
-            <pan-thumb :image="form.avatar" />
+            <pan-thumb :image="ruleForm.avatar" />
             <!-- 文件上传按钮 -->
             <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像</el-button>
 
@@ -53,10 +52,8 @@
               @close="close"
               @crop-upload-success="cropSuccess"
             />
-          </el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button>取消</el-button>
         </el-form-item>
+         <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
@@ -66,6 +63,7 @@
 <script>
 import teacher from "@/api/teacher/teacherApi";
 import PanThumb from "@/components/PanThumb";
+import ImageCropper from "@/components/ImageCropper";
 export default {
   components: { ImageCropper, PanThumb },
   data() {
@@ -76,6 +74,9 @@ export default {
         level: "",
         intro: ""
       },
+     imagecropperShow:false,
+      //上传组件初始化
+      imagecropperKey :0,
       rules: {
         name: [
           { required: true, message: "请输入讲师姓名", trigger: "blur" },
@@ -111,7 +112,7 @@ export default {
       this.imagecropperShow = false;
       //上传之后接口返回图片地址
       console.log(data);
-      this.form.avatar = data;
+      this.ruleForm.avatar = data;
       this.imagecropperKey = this.imagecropperKey + 1;
     },
     initForm() {
