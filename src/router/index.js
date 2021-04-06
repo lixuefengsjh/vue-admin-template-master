@@ -119,6 +119,13 @@ export const constantRouterMap = [
         name: '课程新增',
         component: () => import('@/views/course/courseAdd'),
         meta: { title: '课程分类管理新增', icon: 'tree' }
+      },
+      {
+        path: 'addCharpter',
+        name: '添加章节',
+        component: () => import('@/views/course/charpterAdd'),
+        meta: { title: '添加章节新增', icon: 'tree' },
+        hidden:true
       }
     ]
   },

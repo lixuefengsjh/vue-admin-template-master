@@ -133,6 +133,7 @@ export default {
     return {
       saveBtnDisabled: false,
       courseInfo: {
+        id:"",
         title: "",
         subjectId: "", //二级分类id
         subjectParentId: "", //一级分类id
@@ -199,10 +200,16 @@ export default {
       course
         .saveCourseInfo(this.courseInfo)
         .then(resp => {
+          //提示保存成功
           this.$message({
             type: "success",
             message: "保存课程基本信息成功"
           });
+        //同时提跳转到章节管理页面
+        this.$router.push({
+           path:'/course/addCharpter',
+           query:{courseId:this.courseInfo.id}
+        });
         })
         .catch(error => {
           this.$message.error("保存课程基本信息失败");
