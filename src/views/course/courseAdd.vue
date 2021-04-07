@@ -197,10 +197,12 @@ export default {
     beforeAvatarUpload() {},
     saveOrUpdate() {
       console.log(this.courseInfo)
+      let id;
       course
         .saveCourseInfo(this.courseInfo)
         .then(resp => {
           //提示保存成功
+          id=resp.data;
           this.$message({
             type: "success",
             message: "保存课程基本信息成功"
@@ -208,11 +210,10 @@ export default {
         //同时提跳转到章节管理页面
         this.$router.push({
            path:'/course/addCharpter',
-           query:{courseId:this.courseInfo.id}
+           query:{courseId:id} 
         });
         })
         .catch(error => {
-          
           this.$message.error("保存课程基本信息失败");
         });
     }

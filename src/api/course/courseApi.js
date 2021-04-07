@@ -13,4 +13,10 @@ export default{
             data:courseInfo
           })
     },
+    getCharpter(courseId){
+        return request({
+            url: `/edu/edu-chapter/${courseId}`,
+            method: 'get'
+          })
+    }
 }
