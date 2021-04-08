@@ -18,5 +18,12 @@ export default{
             url: `/edu/edu-chapter/${courseId}`,
             method: 'get'
           })
-    }
+    },
+    saveOrUpdateCharpter(charpter){
+        return request({
+            url: `/edu/edu-chapter/upOrSave`,
+            method: 'post',
+            data:charpter
+          })
+    },
 }
