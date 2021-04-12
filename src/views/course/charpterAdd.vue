@@ -24,9 +24,9 @@
 
         <!-- 视频 -->
         <ul class="chanpterList videoList">
-          <li v-for="video in chapterVideoList.eduVideos" :key="video.id">
+          <li v-for="video in chapter.eduVideos" :key="video.id">
             <p>
-              {{ video.videoOriginalName }}
+              {{ video.title }}
               <span class="acts">
                 <el-button style type="text">编辑</el-button>
                 <el-button type="text" @click="removeVideo(video.id)">删除</el-button>
@@ -60,6 +60,12 @@
     <!-- 添加和修改课时表单 -->
     <el-dialog :visible.sync="dialogVideoFormVisible" title="添加课时">
       <el-form :model="video" label-width="120px">
+        <el-form-item v-if="false" label="课时id">
+          <el-input v-model="video.id" />
+        </el-form-item>
+                <el-form-item v-if="false" label="章节id">
+          <el-input v-model="video.chapterId" />
+        </el-form-item>
         <el-form-item label="课时标题">
           <el-input v-model="video.title" />
         </el-form-item>
@@ -99,8 +105,12 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVideoFormVisible = false">取 消</el-button>
-        <el-button :disabled="saveVideoBtnDisabled" type="primary" @click="saveOrUpdateVideo">确 定</el-button>
+        <el-button @click="dialogVideoFormVisible= false">取 消</el-button>
+        <el-button
+          :disabled="saveVideoBtnDisabled"
+          type="primary"
+          @click="saveOrUpdateVideo(video)"
+        >确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -114,39 +124,99 @@ export default {
     // }
   },
   methods: {
-    saveOrUpdateVideo() {},
+    saveOrUpdateVideo(video) {
+      video.courseId=this.$route.query.courseId;
+      course
+        .saveOrUpdateVideo(video)
+        .then(resp => {
+          //如果是新增需要在视频需要及时刷新页面新增，修改的话也要及时修改页面内容
+          if(video.id){
+            //修改
+          }else{
+            //新增
+          }
+          this.$message({
+            message: "恭喜你，新增或者修改成功",
+            type: "success"
+          }),
+          this.dialogVideoFormVisible=false;
+        })
+        .catch(error => {
+          this.$message.error("新增或者修改视频小节过程出错误")
+        });
+    },
+    removeVideo(id){
+      course.deleteVideoById(id).then(resp=>{
+          this.$message({
+            type:"success",
+             message: "恭喜你，删除数据成功",
+          })
+      }).catch(error=>{
+        this.$message.error("删除数据失败")
+      });
+    },
     handleVodUploadSuccess() {},
     handleVodRemove() {},
     beforeVodRemove() {},
-    removeChapter(chapter){
-      this.$confirm("是否要删除对应的章节？")
-          .then(resp=>{
-            //首先删除对应的数据
-            //页面对应的数据也要删除
-            //关闭弹框
-          })
+    openVideo(id) {
+      this.dialogVideoFormVisible = true;
+      this.video.chapterId=id;
     },
-    openEditChatper(chapter){ 
-      this.chapter=chapter;
-      this.dialogChapterFormVisible=true},
+    removeChapter(chapter) {
+      this.$confirm("是否要删除对应的章节？").then(resp => {
+        //首先删除对应的数据
+        course
+          .deleteCharpter(chapter.id)
+          .then(resp => {
+            this.chapterVideoList.splice(
+              this.chapterVideoList.findIndex(item => {
+                item.id === chapter.id;
+              }),
+              1
+            );
+          })
+          .catch(err => {
+            this.$message.error("删除数据失败");
+          });
+        //页面对应的数据也要删除
+        //关闭弹框
+      });
+    },
+    openEditChatper(chapter) {
+      this.chapter = chapter;
+      this.dialogChapterFormVisible = true;
+    },
     //添加或者修改章节
     saveOrUpdate() {
-      let charpter1=this.chapter;
-      charpter1.courseId=this.$route.query.courseId;
+      let charpter1 = this.chapter;
+      charpter1.courseId = this.$route.query.courseId;
+      console.log(charpter1.id);
       course
         .saveOrUpdateCharpter(charpter1)
-        .then(resp=>{
-            this.$message({
-              type:"success",
-              message:"添加章节成功"
-            })
-            //页面需要新增一条章节数据
-         charpter1.id=resp.data;
-            this.chapterVideoList.push(charpter1)
-            this.dialogChapterFormVisible=false
+        .then(resp => {
+          this.$message({
+            type: "success",
+            message: "添加或修改章节成功"
+          });
+          //页面需要新增一条章节数据
+          if (!charpter1.id) {
+            charpter1.id = resp.data;
+            this.chapterVideoList.push(charpter1);
+          } else {
+            console.log("开始==========" + charpter1.id);
+            let index = this.chapterVideoList.findIndex(item => {
+              console.log(item.id);
+              item.id == charpter1.id;
+            });
+            console.log(index);
+            console.log(this.chapterVideoList[index].title);
+            (this.chapterVideoList[index].title = charpter1.title),
+              (this.chapterVideoList[index].sort = charpter1.sort);
+          }
+          this.dialogChapterFormVisible = false;
         })
-        .catch(error=>{
-          this.$message.error("操作失败，请重试")
+        .catch(error => {
+          this.$message.error("操作失败，请重试");
         });
     },
     handleUploadExceed() {},

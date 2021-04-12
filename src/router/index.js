@@ -126,6 +126,13 @@ export const constantRouterMap = [
         component: () => import('@/views/course/charpterAdd'),
         meta: { title: '添加章节新增', icon: 'tree' },
         hidden:true
+      },
+      {
+        path: 'publish',
+        name: '课程发布',
+        component: () => import('@/views/course/publish'),
+        meta: { title: '课程发布', icon: 'tree' },
+        hidden:true
       }
     ]
   },

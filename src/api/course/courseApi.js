@@ -26,4 +26,23 @@ export default{
             data:charpter
           })
     },
+    deleteCharpter(charpterId){
+        return request({
+            url: `/edu/edu-chapter/delete/${charpterId}`,
+            method: 'get'
+          })
+    },
+    saveOrUpdateVideo(video){
+        return request({
+            url: `/edu/edu-video`,
+            method: 'post',
+            data:video
+          })
+    },
+    deleteVideoById(id){
+        return request({
+            url: `/edu/edu-video/${id}`,
+            method: 'get'
+          })
+    }
 }
